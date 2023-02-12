@@ -1,29 +1,20 @@
 "use strict";
 import fs from "fs";
 import { Pool } from "pg";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 dotenv.config();
+
 const pool = new Pool({
-  user:process.env.PGUSER,
-  host:process.env.PGHOST,
-  port:Number(process.env.PGPORT),
-  password:process.env.PGPASSWORD,
-  database:process.env.PGDATABASE
+  user: process.env.PGUSER,
+  host: process.env.PGHOST,
+  port: Number(process.env.PGPORT),
+  password: process.env.PGPASSWORD,
+  database: process.env.PGDATABASE,
 });
 const db = {
   query: (text: string, params: any[]) => pool.query(text, params),
 };
-interface Business {
-  id: string;
-  name: string;
-  address: string;
-  city: string;
-  state: string;
-  postal_code: string;
-  isRestaurant: boolean;
-  stars: number;
-  review_count: number;
-}
+
 const restaurants: Business[] = [];
 try {
   const data = fs.readFileSync(
