@@ -1,10 +1,10 @@
 const Header = () => {
   return (
-    <nav className="bg-gray-900 p-6 flex items-center justify-between">
-      <a href="#" className="text-white font-medium">
+    <nav className="bg-gray-700 p-6 flex items-center justify-between">
+      <a href="/" className="text-white font-medium">
         Restaview
       </a>
-      
+
       {/* <div className="flex">
         <a href="#" className="text-gray-300 hover:text-white mr-6">
           Home

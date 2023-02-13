@@ -5,7 +5,7 @@ import RestaurantPage from "./Components/RestaurantPage";
 import UpdateReview from "./Components/UpdateReview";
 const App = () => {
   return (
-    <>
+    <div className="bg-neutral-900">
     <Header/>
       <Router>
         <Routes>
@@ -20,7 +20,7 @@ const App = () => {
           />
         </Routes>
       </Router>
-    </>
+    </div>
   );
 };
 

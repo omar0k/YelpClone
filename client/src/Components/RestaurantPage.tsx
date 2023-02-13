@@ -1,90 +1,56 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { ReviewInfo } from "../../../server/Types";
+import { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { Restaurant, Review } from "../../../server/Types";
+import RestaurantsApi from "../api/RestaurantsApi";
+import AddReviewForm from "./AddReviewForm";
 const RestaurantPage = () => {
   const { restaurantId } = useParams();
-  const [reviewInfo, setReviewInfo] = useState<ReviewInfo>({
-    text: "",
-    author: "",
-    rating: 1,
-    restaurant_id: "",
-  });
-  const { text, author, rating, restaurant_id } = reviewInfo;
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setReviewInfo((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-    console.log(reviewInfo.text);
-  };
-  const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
+  const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant>();
+  const [reviews, setReviews] = useState<Review[]>([]);
+  useEffect(() => {
+    RestaurantsApi.get(`/${restaurantId}/reviews`).then((response) => {
+      setReviews(response.data.data);
+    });
+    RestaurantsApi.get(`/${restaurantId}`).then((response) => {
+      setSelectedRestaurant(response.data.data.restaurant);
+    });
+  }, []);
+  console.log(reviews);
   return (
     <>
-      <form className="bg-white p-6 rounded-lg" onSubmit={onSubmitForm}>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 font-medium mb-2"
-            htmlFor="author"
-          >
-            Author
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="Author"
-            value={author}
-            type="text"
-            name="author"
-            onChange={onChange}
-            placeholder="Enter your name"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 font-medium mb-2"
-            htmlFor="rating"
-          >
-            Rating
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-15 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="rating"
-            value={rating}
-            max={5}
-            name="rating"
-            onChange={onChange}
-            min={1}
-            type="number"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 font-medium mb-2"
-            htmlFor="Review"
-          >
-            Review
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-1 px-2  text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-20"
-            id="Review"
-            name="text"
-            maxLength={249}
-            value={text}
-            type="text"
-            onChange={onChange}
-            placeholder="Enter your review"
-          />
-        </div>
-        <div className="flex items-center justify-between">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="submit"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
+      {selectedRestaurant && (
+        <>
+          <div className="flex flex-wrap justify-center">
+            {reviews.length > 0 ? (
+              reviews.map((review, idx) => {
+                return (
+                  <div className="w-1/6 p-4 m-4 bg-white rounded-lg shadow-lg border border-gray-600 ">
+                    <p className="font-bold text-red-500">{review.author}</p>
+                    <div className="flex">
+                      {Array.from({ length: review.rating }, (_, i) => (
+                        <svg viewBox="0 0 24 24" fill="orange" className="w-4 h-4">
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                      </svg>
+                      ))}
+                    </div>
+                    <p className="text-gray-600">{review.text}</p>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="w-1/3 p-4 m-4 bg-white rounded-lg shadow-lg">
+                <p className="font-bold text-black">
+                  No reviews, be the first to review!
+                </p>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+      <div>
+        <button>Add Review</button>
+      </div>
+      <AddReviewForm />
     </>
   );
 };

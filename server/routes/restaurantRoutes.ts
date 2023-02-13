@@ -19,7 +19,7 @@ router.get("/api/v1/restaurants", async (req: Request, res: Response) => {
 });
 router.get("/api/v1/restaurants/:id", async (req: Request, res: Response) => {
   try {
-    const result = await db.query("SELECT * FROM restaurants WHERE id=$1", [
+    const result = await db.query("SELECT * FROM restaurants WHERE restaurant_id=$1", [
       req.params.id,
     ]);
     res.status(200).json({

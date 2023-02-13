@@ -34,17 +34,21 @@ const HomePage = () => {
         className="rounded-md h-7 focus:outline-none p-2 font-medium"
         placeholder="Search restaurant..."
       />
-      <div className="restaurants-list">
+      <div className="restaurants-list flex flex-wrap justify-center">
         {restaurantsList
           .slice(currentPage * pageSize, (currentPage + 1) * pageSize)
           .map((restaurant) => {
             return (
-              <Link
-                to={`/restaurants/${restaurant.restaurant_id}`}
-                key={restaurant.id}
-              >
-                <p>{restaurant.name}</p>
-              </Link>
+              <div className="w-1/4 p-4 m-1 border bg-cyan border-gray-400 rounded-lg h-20 shadow-xl">
+                <Link
+                  className=""
+                  to={`/restaurants/${restaurant.restaurant_id}`}
+                  key={restaurant.id}
+                  state={restaurant.name}
+                >
+                  <p>{restaurant.name}</p>
+                </Link>
+              </div>
             );
           })}
         <button onClick={handlePreviousPage} disabled={currentPage === 0}>
