@@ -19,10 +19,13 @@ const router = express.Router();
 router.get(
   "/api/v1/restaurants/:id/reviews",
   async (req: Request, res: Response) => {
-    const result = await db.query("SELECT * from reviews", []);
+    const result = await db.query(
+      "SELECT * from reviews where restaurant_id=$1",
+      [req.params.id]
+    );
     res.status(200).json({
       message: "Success",
-      data: result,
+      data: result.rows,
     });
   }
 );

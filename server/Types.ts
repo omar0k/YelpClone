@@ -1,11 +1,18 @@
-interface Review {
+export interface Review {
   author: string;
   text: string;
   id: number;
   restaurant_id: string;
   date: Date;
+  rating:number;
 }
-interface Restaurant {
+export interface ReviewInfo{
+  author:string;
+  text:string;
+  restaurant_id:string;
+  rating:number
+}
+export interface Restaurant {
   id: number;
   restaurant_id: string;
   name: string;
@@ -16,7 +23,7 @@ interface Restaurant {
   stars?: number | 0;
   review_count?: number | 0;
 }
-interface Business {
+export interface Business {
   id: string;
   name: string;
   address: string;
@@ -27,3 +34,4 @@ interface Business {
   stars: number;
   review_count: number;
 }
+
